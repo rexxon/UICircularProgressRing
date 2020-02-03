@@ -54,6 +54,9 @@ class UICircularRingLayer: CAShapeLayer {
 
     /// the value label which draws the text for the current value
     lazy var valueLabel: UILabel = UILabel(frame: .zero)
+    
+    /// the value label which draws the text for the current value
+    lazy var customLabel: UILabel = UILabel(frame: .zero)
 
     // MARK: Animatable properties
 
@@ -103,10 +106,17 @@ class UICircularRingLayer: CAShapeLayer {
         super.draw(in: ctx)
         UIGraphicsPushContext(ctx)
         // Draw the rings
+        drawCircle()
         drawOuterRing()
         drawInnerRing(in: ctx)
         // Draw the label
         drawValueLabel()
+        
+        // only shows custom label when attribue set to true
+        if (ring.shouldShowCustomText) {
+            drawCustomLabel()
+        }
+        
         // Call the delegate and notifiy of updated value
         if let updatedValue = value(forKey: "value") as? CGFloat {
             ring.didUpdateValue(newValue: updatedValue)
@@ -147,6 +157,12 @@ class UICircularRingLayer: CAShapeLayer {
         } else {
             return super.action(forKey: event)
         }
+    }
+    
+    private func drawCircle() {
+        let ovalPath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: bounds.maxX, height: bounds.maxY))
+        ring.circleBackgroundColor.setFill()
+        ovalPath.fill()
     }
 
     // MARK: Helpers
@@ -410,8 +426,38 @@ class UICircularRingLayer: CAShapeLayer {
         valueLabel.sizeToFit()
 
         // Deterime what should be the center for the label
-        valueLabel.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        valueLabel.center = CGPoint(x: bounds.minX, y: bounds.midY)
 
-        valueLabel.drawText(in: bounds)
+        if (ring.shouldShowCustomText) {
+            let newCGRect = bounds.inset(by: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0))
+            valueLabel.drawText(in: newCGRect)
+        }
+        else {
+            valueLabel.drawText(in: bounds)
+        }
+    }
+    
+    /**
+     Draws the value label for the view.
+     Only drawn if shouldShowValueText = true
+     */
+    func drawCustomLabel() {
+        guard ring.shouldShowValueText else { return }
+
+        // Draws the text field
+        // Some basic label properties are set
+        customLabel.font = ring.customLabelfont
+        customLabel.textAlignment = .center
+        customLabel.textColor = ring.fontColor
+        customLabel.text = ring.customLabelString
+        ring.willDisplayLabel(label: customLabel)
+        customLabel.sizeToFit()
+
+        // Deterime what should be the center for the label
+        customLabel.center = CGPoint(x: bounds.minX, y: bounds.midY)
+
+        let newCGRect = bounds.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0))
+        
+        customLabel.drawText(in: newCGRect)
     }
 }

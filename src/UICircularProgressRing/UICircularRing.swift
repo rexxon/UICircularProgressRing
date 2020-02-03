@@ -110,6 +110,20 @@ import UIKit
     @IBInspectable public var shouldShowValueText: Bool = true {
         didSet { ringLayer.setNeedsDisplay() }
     }
+    
+    /**
+     A toggle for showing or hiding the custom label.
+     If false the current value will not be shown.
+
+     ## Important ##
+     Default = false
+
+     ## Author
+     rexxon
+     */
+    @IBInspectable public var shouldShowCustomText: Bool = false {
+        didSet { ringLayer.setNeedsDisplay() }
+    }
 
     /**
      A toggle for showing or hiding the value knob when current value == minimum value.
@@ -197,6 +211,19 @@ import UIKit
      Luis Padron
      */
     @IBInspectable open var outerRingColor: UIColor = UIColor.gray {
+        didSet { ringLayer.setNeedsDisplay() }
+    }
+    
+    /**
+     The color for the outer ring
+
+     ## Important ##
+     Default = UIColor.gray
+
+     ## Author
+     Luis Padron
+     */
+    @IBInspectable open var circleBackgroundColor: UIColor = UIColor.gray {
         didSet { ringLayer.setNeedsDisplay() }
     }
 
@@ -290,6 +317,20 @@ import UIKit
     @IBInspectable open var fontColor: UIColor = UIColor.black {
         didSet { ringLayer.setNeedsDisplay() }
     }
+    
+    /**
+     The text color for the custom label field
+
+     ## Important ##
+     Default = UIColor.black
+
+
+     ## Author
+     rexxon
+     */
+    @IBInspectable open var customLabelfontColor: UIColor = UIColor.black {
+        didSet { ringLayer.setNeedsDisplay() }
+    }
 
     /**
      The font to be used for the progress indicator.
@@ -305,6 +346,40 @@ import UIKit
      Luis Padron
      */
     @IBInspectable open var font: UIFont = UIFont.systemFont(ofSize: 18) {
+        didSet { ringLayer.setNeedsDisplay() }
+    }
+    
+    /**
+     The font to be used for the custom Label
+     All font attributes are specified here except for font color, which is done
+     using `fontColor`.
+
+
+     ## Important ##
+     Default = UIFont.boldSystemFont(ofSize: 12)
+
+
+     ## Author
+        rexxon
+     */
+    @IBInspectable open var customLabelfont: UIFont = UIFont.boldSystemFont(ofSize: 12) {
+        didSet { ringLayer.setNeedsDisplay() }
+    }
+    
+    /**
+     The string to be used for the custom Label
+     All font attributes are specified here except for font color, which is done
+     using `fontColor`.
+
+
+     ## Important ##
+     Default = UIFont.boldSystemFont(ofSize: 12)
+
+
+     ## Author
+        rexxon
+     */
+    @IBInspectable open var customLabelString: String = "Custom" {
         didSet { ringLayer.setNeedsDisplay() }
     }
 
